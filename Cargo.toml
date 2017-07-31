@@ -1,0 +1,6 @@
+[package]
+name = "colony-rust"
+version = "0.1.0"
+authors = ["sproctor <sproctor@gmail.com>"]
+
+[dependencies]
