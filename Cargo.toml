@@ -1,5 +1,5 @@
 [package]
-name = "colony-rust"
+name = "colony"
 version = "0.1.0"
 authors = ["sproctor <sproctor@gmail.com>"]
 
