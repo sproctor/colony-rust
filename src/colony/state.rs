@@ -4,7 +4,7 @@ use mio::net::TcpStream;
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
-use room::Room;
+use colony::room::Room;
 
 pub struct GameState {
     world: Vec<Room>,

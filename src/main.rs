@@ -1,5 +1,6 @@
 extern crate mio;
-extern crate colony;
+
+mod colony;
 
 use mio::{Events, Poll, PollOpt, Ready, Token};
 use mio::net::{TcpListener, TcpStream};

@@ -6,7 +6,7 @@ pub struct Room {
     sector_type: SectorType,
     name: String,
     description: String,
-    extra: ExtraDescription,
+    extra: Vec<ExtraDescription>,
     directions: HashMap<Direction, RoomDirection>,
     dark: bool,
     no_mob: bool,
@@ -15,7 +15,21 @@ pub struct Room {
 
 impl Room {
     pub fn build_rooms() -> Vec<Room> {
-        Vec::new()
+        let mut rooms = Vec::new();
+        let room1 = Room {
+            number: 1,
+            zone: 1,
+            sector_type: SectorType::Inside,
+            name: String::from("Starting room"),
+            description: String::from("This is the first room created"),
+            extra: Vec::new(),
+            directions: HashMap::new(),
+            dark: false,
+            no_mob: true,
+            indoors: true,
+        };
+        rooms.push(room1);
+        rooms
     }
 }
 
@@ -44,6 +58,7 @@ enum SectorType {
     Unswimmable,
 }
 
+#[derive(PartialEq, Eq, Hash)]
 enum Direction {
     North,
     East,
