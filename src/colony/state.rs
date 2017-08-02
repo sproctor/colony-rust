@@ -1,6 +1,7 @@
 extern crate mio;
 
-use mio::net::TcpStream;
+use mio::tcp::TcpStream;
+use std::io::Write;
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
@@ -36,6 +37,12 @@ impl GameState {
     pub fn shutdown(&mut self) {
         self.shutdown = true;
     }
+
+    pub fn handle_client(&mut self, mut stream: TcpStream) {
+        let _ = stream.write(b"Welcome to Colony!\r\n");
+        let client = Client::new(stream);
+        self.clients.push(client);
+    }
 }
 
 struct Client {
@@ -44,6 +51,22 @@ struct Client {
     input: VecDeque<String>,
     buffer: String,
     conn: Connection,
+}
+
+impl Client {
+    fn new(stream: TcpStream) -> Client {
+        Client {
+            stream: stream,
+            output: VecDeque::new(),
+            input: VecDeque::new(),
+            buffer: String::new(),
+            conn: Connection::Initial,
+        }
+    }
+
+    fn write(&mut self, buf: &[u8]) {
+        //let _ = self.stream.write(buf);
+    }
 }
 
 enum Connection {

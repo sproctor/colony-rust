@@ -33,14 +33,10 @@ fn main() {
 
         for _ in events.iter() {
             let (stream, _addr) = listener.accept().unwrap();
-            handle_client(stream);
+            game.handle_client(stream);
             game.shutdown();
         }
     }
 
     println!("Shutting down server!");
-}
-
-fn handle_client(mut stream : TcpStream) {
-    let _ = stream.write(b"Welcome to Colony!\r\n");
 }
