@@ -43,14 +43,18 @@ impl GameState {
         let client = Client::new(stream);
         self.clients.push(client);
     }
+
+    pub fn get_clients(&self) -> &Vec<Client> {
+        &self.clients
+    }
 }
 
-struct Client {
+pub struct Client {
     stream: TcpStream,
     output: VecDeque<String>,
     input: VecDeque<String>,
     buffer: String,
-    conn: Connection,
+    state: ClientState,
 }
 
 impl Client {
@@ -60,16 +64,16 @@ impl Client {
             output: VecDeque::new(),
             input: VecDeque::new(),
             buffer: String::new(),
-            conn: Connection::Initial,
+            state: ClientState::Initial,
         }
     }
 
     fn write(&mut self, buf: &[u8]) {
-        //let _ = self.stream.write(buf);
+        let _ = self.stream.write(buf);
     }
 }
 
-enum Connection {
+enum ClientState {
     Initial,
     Creating,
     LoggingIn(String),
