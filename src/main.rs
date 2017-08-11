@@ -42,7 +42,9 @@ fn main() {
         if expected_time < Instant::now() {
             println!("We're lagging pretty bad.")
         } else {
-            sleep(expected_time - Instant::now());
+            let delta = expected_time - Instant::now();
+            println!("Sleeping for {} seconds {} nanoseconds", delta.as_secs(), delta.subsec_nanos());
+            sleep(delta);
         }
 
         incoming.poll(&mut events, Some(Duration::from_secs(0))).unwrap();
@@ -55,14 +57,30 @@ fn main() {
 
         client_streams.poll(&mut events, Some(Duration::from_secs(0))).unwrap();
         for client in game.get_clients() {
+            // TODO: if descriptor has errors, disconnect
+            // TODO: check idle
+            
+            if !has_token(&events, &client.get_token()) {
+                continue;
+            }
+
             client.read();
             match client.get_command() {
-                Some(command) => println!("client buffer: {}", command);
-                None => println!("command not yet ready");
+                Some(command) => { println!("client buffer: {}", command); }
+                None => { println!("command not yet ready"); }
             }
             
         }
     }
 
     println!("Shutting down server!");
+}
+
+fn has_token(events: &Events, token: &Token) -> bool {
+    for event in events {
+        if event.token() == *token {
+            return true;
+        }
+    }
+    false
 }
