@@ -56,13 +56,11 @@ fn main() {
         }
 
         client_streams.poll(&mut events, Some(Duration::from_secs(0))).unwrap();
-        for client in game.get_clients() {
+        for event in events.iter() {
             // TODO: if descriptor has errors, disconnect
             // TODO: check idle
             
-            if !has_token(&events, &client.get_token()) {
-                continue;
-            }
+            let mut client = game.find_client_by_token(event.token()).unwrap();
 
             client.read();
             match client.get_command() {
