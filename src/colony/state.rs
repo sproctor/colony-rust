@@ -1,6 +1,7 @@
 extern crate mio;
 
 use mio::tcp::TcpStream;
+use std::io::Read;
 use std::io::Write;
 use std::collections::HashMap;
 use std::collections::VecDeque;
@@ -68,8 +69,26 @@ impl Client {
         }
     }
 
-    fn write(&mut self, buf: &[u8]) {
+    pub fn write(&mut self, buf: &[u8]) {
         let _ = self.stream.write(buf);
+    }
+
+    pub fn read(&mut self) {
+        let mut buffer = String::new();
+        match self.stream.read_to_string(&mut buffer) {
+            Ok(_) => { self.buffer += &buffer; }
+            Error => {}
+        }
+    }
+
+    pub fn get_command(&mut self) -> Option<String> {
+        if self.buffer.len() > 0 {
+            let result = self.buffer;
+            self.buffer = String::new();
+            return Some(result);
+        } else {
+            return None;
+        }
     }
 }
 
